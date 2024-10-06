@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insights Now - Energy in NJ</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        h1 {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            color: #333;
+        }
+        body {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        #year-slider-container {
+            margin: 30px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #year-slider {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Insights Now - Energy in NJ</h1>
+    <input type="range" id="year-slider" min="1900" max="2024" value="{{ year }}" step="1">
+    <label for="year-slider">Year: <span id="year-label">{{ year }}</span></label>
+    <div style="width: 100%; height: 550px;" id="map-container">
+        {{ map_html|safe }}
+    </div>
+    <script>
+        $(document).ready(function(){
+            $('#year-slider').on('input change', function(){
+                var year = $(this).val();
+                $('#year-label').text(year);
+                $.get('/update_map', {year: year}, function(data){
+                    $('#map-container').html(data);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
